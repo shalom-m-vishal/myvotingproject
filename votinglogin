@@ -1,0 +1,50 @@
+#votinglogin admin.py 
+from django.contrib import admin
+from votinglogin.models import loginForm
+
+admin.site.register(loginForm)
+#votinglogin apps.py
+from django.apps import AppConfig
+
+
+class VotingappConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "votinglogin"
+#votinglogin models.py
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+
+# Create your models here.
+class loginForm(models.Model):
+    username = models.CharField(max_length=100)
+    password = models.CharField(max_length=255)
+#votinglogin urls.py  
+from django.contrib import admin
+from django.urls import include, path
+from votinglogin import views
+
+urlpatterns = [
+
+path('', views.home, name='home'),
+
+
+]
+votinglogin views.py
+from django.shortcuts import render,redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.http import HttpResponse
+from votinglogin.models import loginForm
+
+def home(request):
+    if request.method == 'POST':
+        login=loginForm()
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        login.username=username
+        login.password=password
+        login.save()
+        return render(request,'homepage.html')    
+    return render(request, 'loginpage.html') 
+  
