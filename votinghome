@@ -1,0 +1,34 @@
+#votinghome admin.py
+from django.contrib import admin
+from votinghome.models import Vote
+admin.site.register(Vote)
+#votinghome apps.py
+from django.apps import AppConfig
+class HtmlwebsiteConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "votinghome"
+#votinghome models.py
+from django.db import models
+class Vote(models.Model):
+    candidate = models.CharField(max_length=20) 
+#votinghome urls.py
+from django.contrib import admin
+from django.urls import include, path
+from votinghome import views
+urlpatterns = [
+path('', views.homepage, name='homepage'),
+]  
+#votinghome views.py
+from django.shortcuts import render
+from django.http import HttpResponse
+from votinghome.models import Vote
+def homepage(request):
+    if request.method == 'POST':
+        vote=Vote()
+        candidate= request.POST.get('candidate')
+        vote.candidate=candidate
+        Vote.objects.get(pk=candidate)
+        vote.save()
+            # You can perform additional logic here if needed
+        return HttpResponse(f'Vote submitted Successfully.')
+    return render(request,'homepage.html',{})  
