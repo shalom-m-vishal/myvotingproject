@@ -1,0 +1,207 @@
+<!homepage.html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load static %}
+<img src="{% static 'votinglogo.png' %}" alt="My image">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Home Page</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Voting Page</h1>
+    </header>
+    <main>
+        <section id="Candidate">
+            <h2>Candidates</h2>
+            <ul>
+                <li>Candidate 1</li>
+                <li>Candidate 2</li>
+                <li>Candidate 3</li>
+            </ul>
+        </section>
+        <section id="Vote">
+            <h2>Vote for Your Favorite Candidate</h2>
+            <form  id="Vote"method="POST"action="{% url 'homepage' %}">
+            {%csrf_token%}
+                <label for="candidate">Select Candidate:</label>
+                <select id="candidate" name="candidate">
+                    <option value="1">Candidate 1</option>
+                    <option value="2">Candidate 2</option>
+                    <option value="3">Candidate 3</option>
+                </select>
+                <button type="submit">Submit Vote</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Voting App</p>
+    </footer>
+</body>
+</html>
+
+<!loginpage.html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load static %}
+<img src="{% static 'login.png' %}" alt="login logo">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting App Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color:#008080;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background-color: #ffc0cb;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        input[type="text"],
+        input[type="password"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #888;
+            background-color: #f0f0f0; /* Set the background color for the footer */
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Welcome to Login Page</h2>
+        <form id="loginForm" method="post">
+        {%csrf_token%}
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+         <footer>&copy; 2024 Voting System. All rights reserved.</footer>
+    </div>
+</body>
+</html>
+
+<!contact.html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load static %}
+ <link rel="stylesheet" href="{% static 'contact.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <img src="{% static 'contactlogo.png' %}" alt="My image">
+  <title>Contact Us</title>
+</head>
+<body>
+<h2>For Any Queries</h2>
+  <h1>Contact Us</h1>
+  <form id="ContactForm" method="post">
+  {%csrf_token%}
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br>
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" required><br>
+    <label for="message">Message:</label><br>
+    <textarea id="message" name="message" rows="4" required></textarea><br>
+    <button type="submit">Submit</button>
+    <footer>&copy; 2024 Voting System. All rights reserved.</footer>
+  </form>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      try {
+        const response = await fetch('your-server-endpoint', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await response.json();
+        alert(data.message); // Display success or error message
+        form.reset(); // Clear the form
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
+      }
+    });
+  </script>
+</body>
+</html>
+
+<!signuppage.html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load static %}
+<img src="{% static 'signupimg.png' %}" alt="My image">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+    <title>Voting signup</title>
+</head>
+<body>
+    <h1>Welcome to Signup Page</h1>
+    <form id="User" method="POST" action="{% url 'signup' %}">
+    {%csrf_token%}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="password" id="confirm_password" name="confirm_password" required><br><br>
+ <div class="terms-container">
+            <div>
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">I agree to the terms and conditions</label>
+            </div>
+        </div><br><br>
+
+
+        <button type="submit">Signup</button>
+         <footer>&copy; 2024 Voting System. All rights reserved.</footer>
+    </form>
+    <p>Already have an account? <a href="login.php">Login</a></p>
+</body>
+</html>
