@@ -1,0 +1,58 @@
+#votingsignup admin.py
+from django.contrib import admin
+from votingsignup.models import User
+# Register your models here.
+admin.site.register(User)
+
+#votingsignup apps.py
+from django.apps import AppConfig
+class VotingsignupConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "votingsignup" 
+
+#votingsignup models.py
+from django.db import models
+class User(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    password = models.CharField(max_length=255)
+    agree_terms = models.BooleanField(default=False)
+    def __str__(self):
+        return self.name  
+
+#votingsignup urls.py
+from django.contrib import admin
+from django.urls import include, path
+from votingsignup import views
+urlpatterns = [
+path('', views.signup, name='signup'),
+]
+  
+#votingsignup views.py
+from django.shortcuts import render, redirect
+from votingsignup.models import User
+from django.contrib import messages
+from django.http import HttpResponse
+def signup(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        agree_terms = request.POST.get('terms')
+
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('signup')
+
+        if agree_terms:
+            user = User.objects.create(name=name, email=email, password=password, agree_terms=True)
+            # Additional actions like sending a confirmation email or redirecting to login page
+            
+        else:
+            messages.error(request, "Please agree to the terms and conditions.")
+            return redirect('signup')
+        
+        return HttpResponse('ACCOUNT Created.')    
+    return render(request, 'signuppage.html')
+      
