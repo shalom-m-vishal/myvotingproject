@@ -1,0 +1,50 @@
+#votingcontact admin.py
+from django.contrib import admin
+from votingcontact.models import ContactForm
+admin.site.register(ContactForm)
+
+#votingcontact apps.py
+from django.apps import AppConfig
+class VotingcontactConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "votingcontact"  
+
+#votingcontact models.py
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+# Create your models here.
+class ContactForm(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200)
+    message = models.TextField()  
+
+#votingcontact urls.py
+from django.contrib import admin
+from django.urls import include, path
+from votingcontact import views
+urlpatterns = [
+path('', views.home, name='home'),
+]  
+
+#votingcontact views.py
+from django.http import HttpResponse
+from django.shortcuts import render
+from votingcontact.models import ContactForm
+# Create your views here.
+def home(request):
+    if request.method=='POST':
+        contact = ContactForm()
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        contact.name=name
+        contact.email=email
+        contact.subject=subject
+        contact.message=message
+        contact.save()
+        return HttpResponse("Response Submitted")
+    return render(request,'contact.html')  
+  
